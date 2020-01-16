@@ -1,0 +1,126 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Menu Swagger",
+    "license": {
+      "name": "Amdocs Inc.",
+      "url": "http://www.amdocs.com"
+    },
+    "contact": {
+      "email": "aviramcohenwork@gmail.com",
+      "name": "Aviram Cohen"
+    }
+  },
+  "host": "pizzatask.swagger.io",
+  "basePath": "/v2",
+  "tags": [
+    {
+      "name": "Menu-services-resource",
+      "description": "Pizza Menu Services Resource"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/GetDrinkDetails": {
+      "get": {
+        "tags": [
+          "Menu-services-resource"
+        ],
+        "summary": "This rest is used to get the drink details.",
+        "operationId": "GetDrinkDetails",
+        "description": "Retrieves Drink Details list.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MenuServiceDrinkResponse"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/GetPizzaDetails": {
+      "get": {
+        "tags": [
+          "Menu-services-resource"
+        ],
+        "summary": "This rest is used to get the pizza details.",
+        "operationId": "GetPizzaDetails",
+        "description": "Retrieves Pizza Details list.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/MenuServicePizzaResponse"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "MenuServiceDrinkResponse": {
+      "type": "array",
+      "description": "Contain drink details.",
+      "items": {
+        "$ref": "#/definitions/Drinks"
+      }
+    },
+    "Drinks": {
+      "type": "object",
+      "properties": {
+        "drinkName": {
+          "type": "string",
+          "description": "Contain the drink name."
+        },
+        "drinkPrice": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Contain the drink price."
+        },
+        "drinkPicture": {
+          "type": "string",
+          "description": "Contain the url address with the picture."
+        },
+        "drinkIdNumber": {
+          "type": "string",
+          "description": "Contain the drink id number."
+        }
+      }
+    },
+    "MenuServicePizzaResponse": {
+      "type": "array",
+      "description": "Contain pizza details.",
+      "items": {
+        "$ref": "#/definitions/Pizza"
+      }
+    },
+    "Pizza": {
+      "type": "object",
+      "properties": {
+        "pizzaName": {
+          "type": "string",
+          "description": "Contain the pizza name."
+        },
+        "pizzaPrice": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Contain the pizza price."
+        },
+        "pizzaPicture": {
+          "type": "string",
+          "description": "Contain the url address with the picture."
+        },
+        "pizzaIdNumber": {
+          "type": "string",
+          "description": "Contain the pizza id number."
+        }
+      }
+    }
+  }
+}
