@@ -65,13 +65,18 @@
   },
   "definitions": {
     "MenuServiceDrinkResponse": {
-      "type": "array",
+      "type": "object",
       "description": "Contain drink details.",
-      "items": {
-        "$ref": "#/definitions/Drinks"
+      "properties": {
+        "drinkArray": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Drink"
+          }
+        }
       }
     },
-    "Drinks": {
+    "Drink": {
       "type": "object",
       "properties": {
         "drinkName": {
@@ -94,11 +99,16 @@
       }
     },
     "MenuServicePizzaResponse": {
-      "type": "array",
-      "description": "Contain pizza details.",
-      "items": {
-        "$ref": "#/definitions/Pizza"
-      }
+      "type": "object",
+      "properties": {
+        "pizzaArray": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Pizza"
+          }
+        }
+      },
+      "description": "Contain pizza details."
     },
     "Pizza": {
       "type": "object",

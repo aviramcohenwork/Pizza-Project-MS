@@ -42,7 +42,7 @@ public class LocationServiceImpl implements LocationService {
 	public ArrayList<Locations> getAllLocations() {
 		List<Locations> locationList = mongoTemplate.findAll(Locations.class, "PizzaTaskMSLocations");
 		ArrayList<Locations> locationArray = new ArrayList<>();
-		if(locationList!=null)
+		if(locationList.size()>0)
 		{
 			for(int i=0;i<locationList.size();i++)
 			{
