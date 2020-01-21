@@ -30,12 +30,13 @@ public class MenuServiceImpl implements MenuService{
 		
 		if(pizzaList.size()>0)
 		{
-			for (Pizza pizza : pizzaList) 
+			for (int i=0;i<pizzaList.size();i++) 
 			{
-				pizza.setPizzaIdNumber(pizzaList.get(0).getPizzaIdNumber());
-				pizza.setPizzaName(pizzaList.get(0).getPizzaName());
-				pizza.setPizzaPicture(pizzaList.get(0).getPizzaPicture());
-				pizza.setPizzaPrice(pizzaList.get(0).getPizzaPrice());
+				Pizza pizza = new Pizza();
+				pizza.setPizzaIdNumber(pizzaList.get(i).getPizzaIdNumber());
+				pizza.setPizzaName(pizzaList.get(i).getPizzaName());
+				pizza.setPizzaPicture(pizzaList.get(i).getPizzaPicture());
+				pizza.setPizzaPrice(pizzaList.get(i).getPizzaPrice());
 				pizzaArrayList.add(pizza);
 			}
 			
@@ -52,15 +53,15 @@ public class MenuServiceImpl implements MenuService{
 		
 		if(drinkList.size()>0)
 		{
-			for (Drink drink : drinkList) 
+			for(int i=0;i<drinkList.size();i++)
 			{
-				drink.setDrinkIdNumber(drinkList.get(0).getDrinkIdNumber());
-				drink.setDrinkName(drinkList.get(0).getDrinkName());
-				drink.setDrinkPicture(drinkList.get(0).getDrinkPicture());
-				drink.setDrinkPrice(drinkList.get(0).getDrinkPrice());
+				Drink drink = new Drink();
+				drink.setDrinkIdNumber(drinkList.get(i).getDrinkIdNumber());
+				drink.setDrinkName(drinkList.get(i).getDrinkName());
+				drink.setDrinkPicture(drinkList.get(i).getDrinkPicture());
+				drink.setDrinkPrice(drinkList.get(i).getDrinkPrice());
 				drinkArrayList.add(drink);
 			}
-			
 			menuServiceDrinkResponse.setDrinkArray(drinkArrayList);
 		}
 		return menuServiceDrinkResponse;

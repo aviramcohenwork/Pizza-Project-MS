@@ -1,6 +1,7 @@
 package com.amdocs.pizzataskms.service;
 
 import com.amdocs.pizzataskms.model.Locations;
+import com.amdocs.pizzataskms.model.LocationsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,9 @@ public class LocationServiceImpl implements LocationService {
 	 * @return {Object} Contain the location details
 	 */
 	@Override
-	public ArrayList<Locations> getAllLocations() {
+	public LocationsResponse getAllLocations() {
 		List<Locations> locationList = mongoTemplate.findAll(Locations.class, "PizzaTaskMSLocations");
+		LocationsResponse Locations = new LocationsResponse();
 		ArrayList<Locations> locationArray = new ArrayList<>();
 		if(locationList.size()>0)
 		{
@@ -53,7 +55,11 @@ public class LocationServiceImpl implements LocationService {
 			}
 			System.out.println(locationArray);
 		}
-		return locationArray;
+		
+		Locations.setLocations(locationArray);
+		
+		
+		return Locations;
 	}
 
 }

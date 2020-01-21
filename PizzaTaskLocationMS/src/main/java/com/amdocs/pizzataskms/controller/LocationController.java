@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import com.amdocs.pizzataskms.model.Locations;
+import com.amdocs.pizzataskms.model.LocationsResponse;
 import com.amdocs.pizzataskms.service.LocationService;
 
 
@@ -24,7 +25,7 @@ public class LocationController {
 	}
     
     @GetMapping(path = "/Locations")
-    public ArrayList<Locations> getLocations()
+    public LocationsResponse getLocations()
     {
     	return locationsService.getAllLocations();
     }

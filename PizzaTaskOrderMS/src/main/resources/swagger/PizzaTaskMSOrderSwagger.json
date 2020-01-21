@@ -1,0 +1,291 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Order Swagger",
+    "license": {
+      "name": "Amdocs Inc.",
+      "url": "http://www.amdocs.com"
+    },
+    "contact": {
+      "email": "aviramcohenwork@gmail.com",
+      "name": "Aviram Cohen"
+    }
+  },
+  "host": "pizzatask.swagger.io",
+  "basePath": "/v2",
+  "tags": [
+    {
+      "name": "Order-services-resource",
+      "description": "Pizza Order Services Resource"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/SaveOrder": {
+      "post": {
+        "tags": [
+          "Order-services-resource"
+        ],
+        "summary": "Save order",
+        "description": "Get order request with the information from frontend and save the information in data base and return response if success or failure.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request",
+            "description": "A Request object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SaveOrderResponse"
+            }
+          }
+        }
+      }
+    },
+    "/GetOrders": {
+      "get": {
+        "tags": [
+          "Order-services-resource"
+        ],
+        "summary": "Receive all orders.",
+        "operationId": "GetOrders",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetOrderResponse"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/GetOrder/{orderIdNumber}": {
+      "get": {
+        "tags": [
+          "Order-services-resource"
+        ],
+        "summary": "Receive an order by order number.",
+        "operationId": "GetOrder",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderIdNumber",
+            "in": "path",
+            "description": "Order id number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetOrderResponse"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "GetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "Order": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "deliveryDetails": {
+                "$ref": "#/definitions/deliveryDetails"
+              },
+              "cartItems": {
+                "$ref": "#/definitions/cartItems"
+              },
+              "totalPrice": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "title": "GetOrderResponse",
+      "description": "This response contain the information for the current order."
+    },
+    "OrderRequest": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/order"
+          }
+        }
+      },
+      "description": "This request contain the information for the current order."
+    },
+    "order": {
+      "type": "object",
+      "required": [
+        "deliveryDetails",
+        "cartItems",
+        "totalPrice",
+        "id"
+      ],
+      "properties": {
+        "deliveryDetails": {
+          "$ref": "#/definitions/deliveryDetails"
+        },
+        "cartItems": {
+          "$ref": "#/definitions/cartItems"
+        },
+        "totalPrice": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "SaveOrderResponse": {
+      "type": "object",
+      "properties": {
+        "CreateOrderStatus": {
+          "type": "string",
+          "description": "Contain the create order status"
+        }
+      }
+    },
+    "deliveryDetails": {
+      "type": "object",
+      "properties": {
+        "fullname": {
+          "type": "string",
+          "description": "Contain the customer name."
+        },
+        "street": {
+          "type": "string",
+          "description": "Contain the street name."
+        },
+        "homenumber": {
+          "type": "string",
+          "description": "Contain the home number."
+        },
+        "phonenumber": {
+          "type": "string",
+          "description": "Contain the phone number."
+        },
+        "locations": {
+          "type": "object",
+          "properties": {
+            "locationDescription": {
+              "type": "string",
+              "description": "Contain the location description."
+            },
+            "locationValueName": {
+              "type": "string",
+              "description": "Contain the location name."
+            }
+          }
+        }
+      },
+      "description": "Contain all the informaton about the delivery details for the current order."
+    },
+    "cartItems": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "PizzaArray": {
+            "$ref": "#/definitions/PizzaArray"
+          },
+          "DrinkArray": {
+            "$ref": "#/definitions/DrinkArray"
+          }
+        }
+      }
+    },
+    "DrinkArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Drink"
+      },
+      "description": "List that contains the drink selected by the customer."
+    },
+    "PizzaArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Pizza"
+      },
+      "description": "List that contains the pizza selected by the customer."
+    },
+    "Drink": {
+      "type": "object",
+      "properties": {
+        "drinkName": {
+          "type": "string",
+          "description": "Contain the drink name."
+        },
+        "drinkPrice": {
+          "type": "string",
+          "description": "Contain the drink price."
+        },
+        "drinkPicture": {
+          "type": "string",
+          "description": "Contain the url address with the picture."
+        },
+        "drinkIdNumber": {
+          "type": "string",
+          "description": "Contain the drink id number."
+        }
+      }
+    },
+    "Pizza": {
+      "type": "object",
+      "properties": {
+        "pizzaName": {
+          "type": "string",
+          "description": "Contain the pizza name."
+        },
+        "pizzaPrice": {
+          "type": "string",
+          "description": "Contain the pizza price."
+        },
+        "pizzaPicture": {
+          "type": "string",
+          "description": "Contain the url address with the picture."
+        },
+        "pizzaIdNumber": {
+          "type": "string",
+          "description": "Contain the pizza id number."
+        }
+      }
+    }
+  }
+}
