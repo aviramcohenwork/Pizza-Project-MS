@@ -30,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setTotalPrice(request.getOrders().get(0).getTotalPrice());
 		order.setDeliveryDetails(request.getOrders().get(0).getDeliveryDetails());
 		order.setCartItems(request.getOrders().get(0).getCartItems());
+		order.setOrderStatus("The pizza delivered to shipping department");
 		return order;
 	}
 	
@@ -44,13 +45,13 @@ public class OrderServiceImpl implements OrderService {
 			Order order = new Order();
 			Order currentOrder = mappingRequest(order,request);
 			orderList.add(currentOrder);
-			System.out.println(currentOrder);
 			orderResponse.setCreateOrderStatus("Success");
 			mongoTemplate.save(order,"PizzaTaskMSOrders");
 		}
 		else {
 			orderResponse.setCreateOrderStatus("Failure");
 		}
+		System.out.println(orderResponse);
 		return orderResponse;
 	}
 

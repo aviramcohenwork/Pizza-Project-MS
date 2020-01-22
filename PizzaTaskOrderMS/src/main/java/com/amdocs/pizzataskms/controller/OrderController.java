@@ -1,6 +1,7 @@
 package com.amdocs.pizzataskms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,11 +19,14 @@ import com.amdocs.pizzataskms.model.external.SaveOrderResponse;
 import com.amdocs.pizzataskms.service.OrderService;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RefreshScope
 @RestController
 public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
 
 	@Autowired
 	private OrderService orderSerivce;
+	
+	
 	
 	@Override
 	@RequestMapping(value = "/SaveOrder", method = RequestMethod.POST)
@@ -31,19 +35,17 @@ public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
 	}
 
 	@Override
-	@GetMapping("/GetOrder/{orderIdNumber}")
+	@GetMapping(path="/GetOrder/{orderIdNumber}",headers = "Accept=application/json")
 	public ResponseEntity<GetOrderResponse> getOrder(Integer orderIdNumber) {
 		return new ResponseEntity<GetOrderResponse>(orderSerivce.getOrderById(orderIdNumber),HttpStatus.OK);
 	}
 
 	@Override
-	@GetMapping("/GetOrders")
+	@GetMapping(path="/GetOrders",headers = "Accept=application/json")
 	public ResponseEntity<GetOrderResponse> getOrders() {
 		return new ResponseEntity<GetOrderResponse>(orderSerivce.getAllOrders(),HttpStatus.OK);
 	}
 
-
-	
 	
 
 }

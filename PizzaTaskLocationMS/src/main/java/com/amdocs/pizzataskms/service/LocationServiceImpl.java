@@ -58,7 +58,6 @@ public class LocationServiceImpl implements LocationService {
 		
 		Locations.setLocations(locationArray);
 		
-		
 		return Locations;
 	}
 

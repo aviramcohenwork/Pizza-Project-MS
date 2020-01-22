@@ -1,6 +1,4 @@
 package com.amdocs.pizzataskms.controller;
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +8,6 @@ import com.amdocs.pizzataskms.model.Locations;
 import com.amdocs.pizzataskms.model.LocationsResponse;
 import com.amdocs.pizzataskms.service.LocationService;
 
-
 @CrossOrigin(origins = "*", allowedHeaders = "*") 
 @RestController
 public class LocationController {
@@ -18,13 +15,13 @@ public class LocationController {
 	@Autowired
 	private LocationService locationsService;
 	
-    @GetMapping(path = "/Location/{locationIdNumber}")
+    @GetMapping(path = "/Location/{locationIdNumber}",headers = "Accept=application/json")
 	public Locations getNameLocation(@PathVariable("locationIdNumber") Long locationIdNumber) {
     	
 		return locationsService.getLocationByIdNumber(locationIdNumber);
 	}
     
-    @GetMapping(path = "/Locations")
+    @GetMapping(path = "/Locations", headers = "Accept=application/json")
     public LocationsResponse getLocations()
     {
     	return locationsService.getAllLocations();

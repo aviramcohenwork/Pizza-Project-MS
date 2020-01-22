@@ -85,6 +85,7 @@
           "Order-services-resource"
         ],
         "summary": "Receive an order by order number.",
+        "description": "Get order request for current order id .",
         "operationId": "GetOrder",
         "produces": [
           "application/json"
@@ -127,10 +128,16 @@
                 "$ref": "#/definitions/cartItems"
               },
               "totalPrice": {
-                "type": "string"
+                "type": "string",
+                "description": "Contain the total price for current order."
               },
               "id": {
-                "type": "string"
+                "type": "string",
+                "description": "Contain order id number ffor current order."
+              },
+              "orderStatus": {
+                "type": "string",
+                "description": "Contain order status."
               }
             }
           }
@@ -167,10 +174,16 @@
           "$ref": "#/definitions/cartItems"
         },
         "totalPrice": {
-          "type": "string"
+          "type": "string",
+          "description": "Contain the total price for current order."
         },
         "id": {
-          "type": "string"
+          "type": "string",
+          "description": "Contain order id number ffor current order."
+        },
+        "orderStatus": {
+          "type": "string",
+          "description": "Contain order status."
         }
       }
     },
