@@ -1,0 +1,7 @@
+---
+applications:
+- name: PizzaTaskMSLocation
+  path: target/PizzaTaskLocationMS-0.0.1-SNAPSHOT.jar
+  domain: cfapps.io
+  memory: 665mb
+  instances: 1

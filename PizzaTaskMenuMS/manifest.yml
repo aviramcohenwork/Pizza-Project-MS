@@ -1,0 +1,7 @@
+---
+applications:
+- name: PizzaTaskMenuMS
+  path: target/PizzaTaskMenuMS-0.0.1-SNAPSHOT.jar
+  domain: cfapps.io
+  memory: 690mb
+  instances: 1690

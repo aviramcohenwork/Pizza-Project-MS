@@ -1,0 +1,7 @@
+---
+applications:
+- name: PizzaTaskOrderMS
+  path: target/PizzaTaskOrderMS-0.0.1-SNAPSHOT.jar
+  domain: cfapps.io
+  memory: 680mb
+  instances: 1
