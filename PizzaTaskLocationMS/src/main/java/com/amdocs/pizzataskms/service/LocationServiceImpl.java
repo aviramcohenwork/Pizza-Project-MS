@@ -1,5 +1,7 @@
 package com.amdocs.pizzataskms.service;
 
+import com.amdocs.pizzataskms.model.Coupons;
+import com.amdocs.pizzataskms.model.CouponsResponse;
 import com.amdocs.pizzataskms.model.Locations;
 import com.amdocs.pizzataskms.model.LocationsResponse;
 
@@ -53,12 +55,30 @@ public class LocationServiceImpl implements LocationService {
 				loc.setLocationValueName(locationList.get(i).getLocationValueName());
 				locationArray.add(loc);
 			}
-			System.out.println(locationArray);
 		}
 		
 		Locations.setLocations(locationArray);
 		
 		return Locations;
+	}
+
+	@Override
+	public CouponsResponse getCopuns() {
+		List<Coupons> couponsList = mongoTemplate.findAll(Coupons.class, "PizzaTaskMSCoupons");
+		CouponsResponse copuns = new CouponsResponse();
+		ArrayList<Coupons> couponArray = new ArrayList<>();
+		if(couponsList.size()>0)
+		{
+			for(int i=0;i<couponsList.size();i++)
+			{
+				Coupons coup = new Coupons();
+				coup.setCouponCode(couponsList.get(i).getCouponCode());
+				coup.setCouponId(couponsList.get(i).getCouponId());
+				couponArray.add(coup);
+			}
+		}
+		copuns.setCoupons(couponArray);
+		return copuns;
 	}
 
 }

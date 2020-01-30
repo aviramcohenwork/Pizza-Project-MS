@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.amdocs.pizzataskms.model.Coupons;
+import com.amdocs.pizzataskms.model.CouponsResponse;
 import com.amdocs.pizzataskms.model.Locations;
 import com.amdocs.pizzataskms.model.LocationsResponse;
 import com.amdocs.pizzataskms.service.LocationService;
@@ -21,11 +24,15 @@ public class LocationController {
 		return locationsService.getLocationByIdNumber(locationIdNumber);
 	}
     
-    @GetMapping(path = "/Locations", headers = "Accept=application/json")
+    @GetMapping(path = "/Locations/GetAllLocations", headers = "Accept=application/json")
     public LocationsResponse getLocations()
     {
     	return locationsService.getAllLocations();
     }
   
-    
+    @GetMapping(path = "/Coupons/GetAllCopuns",headers = "Accept=application/json")
+	public CouponsResponse getCopuns() {
+    	
+		return locationsService.getCopuns();
+	}
 }

@@ -1,8 +1,8 @@
 package com.amdocs.pizzataskms.service;
 
-import org.springframework.stereotype.Service;
+import com.amdocs.pizzataskms.model.GetOrderResponse;
 
-@Service
 public interface DeliveryService {
-
+	
+	GetOrderResponse updateOrderStatus(Integer orderIdNumber);
 }

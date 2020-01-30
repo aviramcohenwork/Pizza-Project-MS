@@ -29,19 +29,19 @@ public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
 	
 	
 	@Override
-	@RequestMapping(value = "/SaveOrder", method = RequestMethod.POST)
+	@RequestMapping(value = "/Order/SaveOrder", method = RequestMethod.POST)
 	public ResponseEntity<SaveOrderResponse> saveOrderPost(OrderRequest request) {
 		return new ResponseEntity<SaveOrderResponse>(orderSerivce.saveOrder(request),HttpStatus.OK);
 	}
 
 	@Override
-	@GetMapping(path="/GetOrder/{orderIdNumber}",headers = "Accept=application/json")
+	@GetMapping(path="/Order/GetOrder/{orderIdNumber}",headers = "Accept=application/json")
 	public ResponseEntity<GetOrderResponse> getOrder(Integer orderIdNumber) {
 		return new ResponseEntity<GetOrderResponse>(orderSerivce.getOrderById(orderIdNumber),HttpStatus.OK);
 	}
 
 	@Override
-	@GetMapping(path="/GetOrders",headers = "Accept=application/json")
+	@GetMapping(path="/Order/GetOrders",headers = "Accept=application/json")
 	public ResponseEntity<GetOrderResponse> getOrders() {
 		return new ResponseEntity<GetOrderResponse>(orderSerivce.getAllOrders(),HttpStatus.OK);
 	}

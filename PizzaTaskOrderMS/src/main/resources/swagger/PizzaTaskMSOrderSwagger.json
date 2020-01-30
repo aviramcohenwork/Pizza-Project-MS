@@ -12,8 +12,8 @@
       "name": "Aviram Cohen"
     }
   },
-  "host": "pizzatask.swagger.io",
-  "basePath": "/v2",
+  "host": "localhost:8082",
+  "basePath": "/Order",
   "tags": [
     {
       "name": "Order-services-resource",

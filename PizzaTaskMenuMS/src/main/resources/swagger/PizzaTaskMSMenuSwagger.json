@@ -12,11 +12,11 @@
       "name": "Aviram Cohen"
     }
   },
-  "host": "pizzatask.swagger.io",
-  "basePath": "/v2",
+  "host": "localhost:8081",
+  "basePath": "/Menu",
   "tags": [
     {
-      "name": "Menu-services-resource",
+      "name": "Menu-services-resoizzatask.swaggerurce",
       "description": "Pizza Menu Services Resource"
     }
   ],

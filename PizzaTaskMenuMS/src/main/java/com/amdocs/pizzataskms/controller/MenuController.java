@@ -21,13 +21,13 @@ public class MenuController implements GetDrinkDetailsApi,GetPizzaDetailsApi {
 	private MenuService menuService;
 	
 	@Override
-	@GetMapping(path = "/PizzaDetails",headers = "Accept=application/json")
+	@GetMapping(path = "/Menu/PizzaDetails",headers = "Accept=application/json")
 	public ResponseEntity<MenuServicePizzaResponse> getPizzaDetails() {
 		return new ResponseEntity<MenuServicePizzaResponse>(menuService.pizzaMenuResponse(),HttpStatus.OK);
 	}
 
 	@Override
-	@GetMapping(path = "/DrinkDetails",headers = "Accept=application/json")
+	@GetMapping(path = "/Menu//DrinkDetails",headers = "Accept=application/json")
 	public ResponseEntity<MenuServiceDrinkResponse> getDrinkDetails() {
 		return new ResponseEntity<MenuServiceDrinkResponse>(menuService.drinkMenuResponse(),HttpStatus.OK);
 	}
