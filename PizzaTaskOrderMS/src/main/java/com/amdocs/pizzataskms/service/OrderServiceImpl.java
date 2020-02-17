@@ -4,25 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import com.amdocs.pizzataskms.model.external.CartItems;
-import com.amdocs.pizzataskms.model.external.DeliveryDetails;
+import com.amdocs.pizzataskms.model.SentOrder;
 import com.amdocs.pizzataskms.model.external.GetOrderResponse;
 import com.amdocs.pizzataskms.model.external.GetOrderResponseOrder;
 import com.amdocs.pizzataskms.model.external.Order;
 import com.amdocs.pizzataskms.model.external.OrderRequest;
 import com.amdocs.pizzataskms.model.external.SaveOrderResponse;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private KafkaTemplate<String,SentOrder> kafkaTemplate;
 	
 	public Order mappingRequest(Order order,OrderRequest request)
 	{
@@ -33,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderStatus("The pizza delivered to shipping department");
 		return order;
 	}
-	
+
 	@Override
 	public SaveOrderResponse saveOrder(OrderRequest request) {
 
@@ -52,9 +56,24 @@ public class OrderServiceImpl implements OrderService {
 			orderResponse.setCreateOrderStatus("Failure");
 		}
 		System.out.println(orderResponse);
+		
+		SentOrderStatusTopic(request);
+
 		return orderResponse;
 	}
+	
+	public void SentOrderStatusTopic(OrderRequest request) {
+		SentOrder order = new SentOrder();
+		order.setOrderIdNumber(request.getOrders().get(0).getId());
+		order.setOrderIdStatus("The pizza was sent to the delivery department for preparation and wrapping to be shipped");
+		try {
+			kafkaTemplate.send("sentorderstatus",order);
 
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+	
 	@Override
 	public GetOrderResponse getOrderById(Integer orderId) {
 		GetOrderResponse orderResponse = new GetOrderResponse();
@@ -74,6 +93,12 @@ public class OrderServiceImpl implements OrderService {
 		ordersResponse.setOrder(ordersList);
 		return ordersResponse;
 
+	}
+
+	@Override
+	public SentOrder SentOrderToKafka() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

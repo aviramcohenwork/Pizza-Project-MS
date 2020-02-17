@@ -2,15 +2,21 @@ package com.amdocs.pizzataskms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;import org.springframework.stereotype.Service;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
 import com.amdocs.pizzataskms.model.CartItems;
 import com.amdocs.pizzataskms.model.DeliveryDetails;
 import com.amdocs.pizzataskms.model.DeliverySaveOrder;
 import com.amdocs.pizzataskms.model.GetOrderResponse;
 import com.amdocs.pizzataskms.model.GetOrderResponseOrder;
+import com.amdocs.pizzataskms.model.SentOrder;
 
 @Service
 public class DeliveryServiceImpl implements DeliveryService {
@@ -20,6 +26,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	@Autowired
+	private KafkaTemplate<String,SentOrder> kafkaTemplate;
 	
 	private boolean checkIfIdExists(GetOrderResponse newResponse)
 	{
@@ -90,4 +99,37 @@ public class DeliveryServiceImpl implements DeliveryService {
 		GetOrderResponse newResponse = MappingObjectAndUpdateStatus(response);
 		SaveOrderDetails(newResponse);
 		return newResponse;
-	}}
+	}
+
+	@KafkaListener(topics="sentorderstatus" , groupId ="group_id")
+	@Override
+	public SentOrder getOrderUpdate(SentOrder order) {
+		SentOrder Order = new SentOrder();
+		Order.setOrderIdNumber(order.getOrderIdNumber());
+		Order.setOrderIdStatus(order.getOrderIdStatus());
+		try {
+			Thread.sleep(6000);
+			GetOrderStatusTopic(Order);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		return Order;
+	}
+	
+	
+	public void GetOrderStatusTopic(SentOrder Order ) {
+		Order.setOrderIdStatus("The Pizza Is Ready And Packaged Out For Delivery Now Please Be Available The Messenger Will Contact You Soon!");
+		try {
+			kafkaTemplate.send("getorderstatus",Order);
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+	}
+	
+	
+	
+}

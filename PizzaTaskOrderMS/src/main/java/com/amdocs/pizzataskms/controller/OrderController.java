@@ -4,15 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.amdocs.pizzataskms.api.external.GetOrderApi;
 import com.amdocs.pizzataskms.api.external.GetOrdersApi;
 import com.amdocs.pizzataskms.api.external.SaveOrderApi;
+import com.amdocs.pizzataskms.model.SentOrder;
 import com.amdocs.pizzataskms.model.external.GetOrderResponse;
 import com.amdocs.pizzataskms.model.external.OrderRequest;
 import com.amdocs.pizzataskms.model.external.SaveOrderResponse;
@@ -25,8 +27,6 @@ public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
 
 	@Autowired
 	private OrderService orderSerivce;
-	
-	
 	
 	@Override
 	@RequestMapping(value = "/Order/SaveOrder", method = RequestMethod.POST)
@@ -45,6 +45,9 @@ public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
 	public ResponseEntity<GetOrderResponse> getOrders() {
 		return new ResponseEntity<GetOrderResponse>(orderSerivce.getAllOrders(),HttpStatus.OK);
 	}
+	
+
+
 
 	
 

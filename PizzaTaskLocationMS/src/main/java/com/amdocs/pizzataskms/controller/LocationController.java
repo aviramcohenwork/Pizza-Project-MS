@@ -15,8 +15,13 @@ import com.amdocs.pizzataskms.service.LocationService;
 @RestController
 public class LocationController {
 	
-	@Autowired
+	
 	private LocationService locationsService;
+	
+	public LocationController(LocationService locationsService)
+	{
+		this.locationsService=locationsService;
+	}
 	
     @GetMapping(path = "/Location/{locationIdNumber}",headers = "Accept=application/json")
 	public Locations getNameLocation(@PathVariable("locationIdNumber") Long locationIdNumber) {

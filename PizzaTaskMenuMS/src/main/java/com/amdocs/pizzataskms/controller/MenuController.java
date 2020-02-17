@@ -31,5 +31,5 @@ public class MenuController implements GetDrinkDetailsApi,GetPizzaDetailsApi {
 	public ResponseEntity<MenuServiceDrinkResponse> getDrinkDetails() {
 		return new ResponseEntity<MenuServiceDrinkResponse>(menuService.drinkMenuResponse(),HttpStatus.OK);
 	}
-
+	
 }
