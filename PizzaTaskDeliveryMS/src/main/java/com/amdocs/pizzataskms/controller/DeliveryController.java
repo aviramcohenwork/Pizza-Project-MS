@@ -19,7 +19,7 @@ public class DeliveryController {
 	private DeliveryService deliveryService;
 	
 	@GetMapping(path = "/GetOrder/{orderIdNumber}",headers = "Accept=application/json")
-	public void getNameLocation(@PathVariable Integer orderIdNumber){
+	public void getNameLocation(@PathVariable String orderIdNumber){
 		deliveryService.updateOrderStatus(orderIdNumber);
 	}
     

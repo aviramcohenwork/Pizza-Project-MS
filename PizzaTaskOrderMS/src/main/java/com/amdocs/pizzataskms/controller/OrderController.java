@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.amdocs.pizzataskms.api.external.GetOrderApi;
+import com.amdocs.pizzataskms.api.external.GetOrderStatusApi;
 import com.amdocs.pizzataskms.api.external.GetOrdersApi;
 import com.amdocs.pizzataskms.api.external.SaveOrderApi;
 import com.amdocs.pizzataskms.model.SentOrder;
 import com.amdocs.pizzataskms.model.external.GetOrderResponse;
+import com.amdocs.pizzataskms.model.external.GetOrderStatusResponse;
 import com.amdocs.pizzataskms.model.external.OrderRequest;
 import com.amdocs.pizzataskms.model.external.SaveOrderResponse;
 import com.amdocs.pizzataskms.service.OrderService;
@@ -23,7 +25,7 @@ import com.amdocs.pizzataskms.service.OrderService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RefreshScope
 @RestController
-public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
+public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi,GetOrderStatusApi{
 
 	@Autowired
 	private OrderService orderSerivce;
@@ -45,9 +47,13 @@ public class OrderController implements GetOrderApi,SaveOrderApi,GetOrdersApi{
 	public ResponseEntity<GetOrderResponse> getOrders() {
 		return new ResponseEntity<GetOrderResponse>(orderSerivce.getAllOrders(),HttpStatus.OK);
 	}
+
+	@Override
+	@GetMapping(path="Order/GetOrderStatus/{orderIdNumber}",headers = "Accept=application/json")
+	public ResponseEntity<GetOrderStatusResponse> getOrderStatus(Integer orderIdNumber) {
+		return new ResponseEntity<GetOrderStatusResponse>(orderSerivce.getOrderStatusForFE(orderIdNumber),HttpStatus.OK);
+	}
 	
-
-
 
 	
 

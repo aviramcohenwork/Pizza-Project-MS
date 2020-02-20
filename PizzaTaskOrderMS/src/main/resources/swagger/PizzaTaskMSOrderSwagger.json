@@ -24,6 +24,38 @@
     "https"
   ],
   "paths": {
+    "/GetOrderStatus/{orderIdNumber}": {
+      "get": {
+        "tags": [
+          "Order-services-resource"
+        ],
+        "summary": "Receive order status",
+        "description": "Get order request for current order id .",
+        "operationId": "GetOrderStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "orderIdNumber",
+            "in": "path",
+            "description": "Order id number",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetOrderStatusResponse"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/SaveOrder": {
       "post": {
         "tags": [
@@ -113,6 +145,16 @@
     }
   },
   "definitions": {
+    "GetOrderStatusResponse": {
+      "type": "object",
+      "properties": {
+        "orderStatus": {
+          "type": "string",
+          "description": "contain the status.",
+          "example": "Pizza In Way."
+        }
+      }
+    },
     "GetOrderResponse": {
       "type": "object",
       "properties": {

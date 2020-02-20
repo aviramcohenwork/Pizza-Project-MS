@@ -2,6 +2,7 @@ package com.amdocs.pizzataskms.service;
 
 import com.amdocs.pizzataskms.model.SentOrder;
 import com.amdocs.pizzataskms.model.external.GetOrderResponse;
+import com.amdocs.pizzataskms.model.external.GetOrderStatusResponse;
 import com.amdocs.pizzataskms.model.external.OrderRequest;
 import com.amdocs.pizzataskms.model.external.SaveOrderResponse;
 
@@ -10,5 +11,6 @@ public interface OrderService
 	SaveOrderResponse saveOrder(OrderRequest request);
 	GetOrderResponse getOrderById(Integer orderId);
 	GetOrderResponse getAllOrders();
-	SentOrder SentOrderToKafka(); 
+	void getOrderStatusFromKafka(SentOrder getOrderStatus);
+	GetOrderStatusResponse getOrderStatusForFE(Integer orderIdNumber);
 }

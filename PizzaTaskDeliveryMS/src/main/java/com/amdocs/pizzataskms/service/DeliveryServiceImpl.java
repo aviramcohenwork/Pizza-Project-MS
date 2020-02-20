@@ -1,8 +1,5 @@
 package com.amdocs.pizzataskms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,11 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.amdocs.pizzataskms.model.CartItems;
-import com.amdocs.pizzataskms.model.DeliveryDetails;
-import com.amdocs.pizzataskms.model.DeliverySaveOrder;
-import com.amdocs.pizzataskms.model.GetOrderResponse;
-import com.amdocs.pizzataskms.model.GetOrderResponseOrder;
+import com.amdocs.pizzataskms.model.Order;
 import com.amdocs.pizzataskms.model.SentOrder;
 
 @Service
@@ -30,75 +23,39 @@ public class DeliveryServiceImpl implements DeliveryService {
 	@Autowired
 	private KafkaTemplate<String,SentOrder> kafkaTemplate;
 	
-	private boolean checkIfIdExists(GetOrderResponse newResponse)
-	{
-		Query query = new Query();
-		query.addCriteria(Criteria.where("orderId").is(newResponse.getOrder().get(0).getId()));
-		GetOrderResponseOrder answer = mongoTemplate.findOne(query, GetOrderResponseOrder.class, "PizzaTaskMSDelivery");
-		if(answer!=null)
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
 		
-	}
-	
-	private String SaveOrderDetails(GetOrderResponse newResponse)
+	private String SaveOrderDetails(String orderIdNumber)
 	{
-		DeliverySaveOrder deliveryOrder = new DeliverySaveOrder();
-		deliveryOrder.setOrderId(newResponse.getOrder().get(0).getId());
-		deliveryOrder.setOrderStatus(newResponse.getOrder().get(0).getOrderStatus());
-		if(checkIfIdExists(newResponse)==true)
-		{
-			System.out.println("False");
-			return " Error id is exists";
+
+		Order order = new Order();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(orderIdNumber));
+		order = mongoTemplate.findOne(query, Order.class, "PizzaTaskMSOrders");
+		order.setOrderStatus("The pizza has arrived at the shipping department and is starting to prepare and pack it for delivery.");
+		try {
+			Thread.sleep(4000);
+			mongoTemplate.save(order,"PizzaTaskMSOrders");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		else {
-			mongoTemplate.save(deliveryOrder,"PizzaTaskMSDelivery");
-		}
-		System.out.println("Success");
+
 		return "Succees";
 	}
 	
-	private GetOrderResponse MappingObjectAndUpdateStatus(GetOrderResponse response)
-	{
-		GetOrderResponse getOrderResponse = new GetOrderResponse();
-		GetOrderResponseOrder getOrderResponseOrder = new GetOrderResponseOrder();
-		List<GetOrderResponseOrder> listGetOrderResponseOrder = new ArrayList<GetOrderResponseOrder>();
-		
-		CartItems cartitems = response.getOrder().get(0).getCartItems();
-		DeliveryDetails deliveryDetails =  new DeliveryDetails();
-		deliveryDetails.setFullname(response.getOrder().get(0).getDeliveryDetails().getFullname());
-		deliveryDetails.setHomenumber(response.getOrder().get(0).getDeliveryDetails().getHomenumber());
-		deliveryDetails.setLocations(response.getOrder().get(0).getDeliveryDetails().getLocations());
-		deliveryDetails.setPhonenumber(response.getOrder().get(0).getDeliveryDetails().getPhonenumber());
-		deliveryDetails.setStreet(response.getOrder().get(0).getDeliveryDetails().getStreet());
-		String id = response.getOrder().get(0).getId();
-		String orderStatus = "The pizza is arraived to delivery department and we start to preper it for delivery";
-		String totalPrice = response.getOrder().get(0).getTotalPrice();
-		
-		getOrderResponseOrder.setCartItems(cartitems);
-		getOrderResponseOrder.setDeliveryDetails(deliveryDetails);
-		getOrderResponseOrder.setId(id);
-		getOrderResponseOrder.setOrderStatus(orderStatus);
-		getOrderResponseOrder.setTotalPrice(totalPrice);
-		
-		listGetOrderResponseOrder.add(getOrderResponseOrder);
-		getOrderResponse.setOrder(listGetOrderResponseOrder);
-		
-		return getOrderResponse;
-		
-	}
 	
 	@Override
-	public GetOrderResponse updateOrderStatus(Integer orderIdNumber) {
-		GetOrderResponse response = deliveryFeign.getOrderById(orderIdNumber);
-		GetOrderResponse newResponse = MappingObjectAndUpdateStatus(response);
-		SaveOrderDetails(newResponse);
-		return newResponse;
+	public String updateOrderStatus(String orderIdNumber) 
+	{
+		System.out.println("hdsfdsfsd============================================================dsfdsfds");
+		if(orderIdNumber!=null)
+		{
+			SaveOrderDetails(orderIdNumber);
+			return "success to update status";
+		}
+		else {
+			return "Faild to update status";
+		}
+		
 	}
 
 	@KafkaListener(topics="sentorderstatus" , groupId ="group_id")
@@ -107,26 +64,33 @@ public class DeliveryServiceImpl implements DeliveryService {
 		SentOrder Order = new SentOrder();
 		Order.setOrderIdNumber(order.getOrderIdNumber());
 		Order.setOrderIdStatus(order.getOrderIdStatus());
+//		updateOrderStatus(order.getOrderIdNumber());
 		try {
 			Thread.sleep(6000);
 			GetOrderStatusTopic(Order);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		
 		return Order;
 	}
 	
 	
 	public void GetOrderStatusTopic(SentOrder Order ) {
-		Order.setOrderIdStatus("The Pizza Is Ready And Packaged Out For Delivery Now Please Be Available The Messenger Will Contact You Soon!");
+		Order.setOrderIdStatus("The Pizza Has Arrived At The Shipping Department And Is Starting To Prepare And Pack It For Delivery.!");
 		try {
-			kafkaTemplate.send("getorderstatus",Order);
+			kafkaTemplate.send("updateorderstatus",Order);
 
 		} catch (Exception e) {
 			e.getMessage();
+		}
+		
+		try {
+			Thread.sleep(9000);
+			Order.setOrderIdStatus("The Pizza Is Ready And Packaged Out For Delivery Now Please Be Available The Messenger Will Contact You Soon!");
+			kafkaTemplate.send("updateorderstatus",Order);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	

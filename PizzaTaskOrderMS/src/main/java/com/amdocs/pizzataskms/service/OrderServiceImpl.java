@@ -7,14 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import com.amdocs.pizzataskms.model.GetOrderStatus;
 import com.amdocs.pizzataskms.model.SentOrder;
 import com.amdocs.pizzataskms.model.external.GetOrderResponse;
 import com.amdocs.pizzataskms.model.external.GetOrderResponseOrder;
+import com.amdocs.pizzataskms.model.external.GetOrderStatusResponse;
 import com.amdocs.pizzataskms.model.external.Order;
 import com.amdocs.pizzataskms.model.external.OrderRequest;
 import com.amdocs.pizzataskms.model.external.SaveOrderResponse;
@@ -27,7 +28,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	private KafkaTemplate<String,SentOrder> kafkaTemplate;
-	
+		
 	public Order mappingRequest(Order order,OrderRequest request)
 	{
 		order.setId(request.getOrders().get(0).getId());
@@ -95,12 +96,37 @@ public class OrderServiceImpl implements OrderService {
 
 	}
 
+	@KafkaListener(topics="updateorderstatus" , groupId ="group_id")
 	@Override
-	public SentOrder SentOrderToKafka() {
-		// TODO Auto-generated method stub
-		return null;
+	public void getOrderStatusFromKafka(SentOrder getOrderStatus) {
+		Order reciveOrder = new Order();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(getOrderStatus.getOrderIdNumber()));
+		reciveOrder = mongoTemplate.findOne(query, Order.class, "PizzaTaskMSOrders");
+		reciveOrder.setOrderStatus(getOrderStatus.getOrderIdStatus());
+		mongoTemplate.save(reciveOrder,"PizzaTaskMSOrders");
+//		System.out.println(reciveOrder);
 	}
 
 
 
+	@Override
+	public GetOrderStatusResponse getOrderStatusForFE(Integer orderIdNumber) {
+		GetOrderStatusResponse getOrderStatusResponse = new GetOrderStatusResponse();
+		if(orderIdNumber!=null)
+		{
+			GetOrderResponseOrder reciveOrder = new GetOrderResponseOrder();
+			Query query = new Query();
+			String orderid = orderIdNumber.toString();
+			query.addCriteria(Criteria.where("_id").is(orderid));
+			reciveOrder = mongoTemplate.findOne(query, GetOrderResponseOrder.class, "PizzaTaskMSOrders");
+			getOrderStatusResponse.setOrderStatus(reciveOrder.getOrderStatus());
+			System.out.println(reciveOrder.getOrderStatus());
+			return getOrderStatusResponse;
+		}else
+		{
+			return getOrderStatusResponse;
+		}
+		
+	}
 }
